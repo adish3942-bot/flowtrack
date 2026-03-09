@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FlowTrack PRO — Login</title>
+  <link rel="manifest" href="manifest.json"/>
+  <meta name="theme-color" content="#07070F"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/login.css"/>
+</head>
+<body>
+  <div class="noise"></div>
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="orb orb3"></div>
+
+  <div class="login-wrap">
+    <div class="login-left">
+      <div class="brand">
+        <span class="brand-ft">FLOW</span><span class="brand-track">TRACK</span>
+        <span class="brand-pro">PRO</span>
+      </div>
+      <p class="tagline">Your all-in-one space for<br/>college, gym & life.</p>
+      <div class="feat-list">
+        <div class="feat"><span>🎓</span> College & School tasks</div>
+        <div class="feat"><span>💪</span> Gym & Diet tracking</div>
+        <div class="feat"><span>🧠</span> Brain training games</div>
+        <div class="feat"><span>🔔</span> Smart notifications</div>
+        <div class="feat"><span>📸</span> Physique progress</div>
+      </div>
+    </div>
+
+    <div class="login-card" id="loginCard">
+      <div class="card-tabs">
+        <button class="ctab active" id="signinTab" onclick="showSignIn()">Sign In</button>
+        <button class="ctab" id="signupTab" onclick="showSignUp()">Sign Up</button>
+      </div>
+
+      <!-- SIGN IN -->
+      <div id="signinForm">
+        <div class="form-group">
+          <label>Username</label>
+          <input type="text" id="siUser" placeholder="Enter username" autocomplete="username"/>
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <div class="pw-wrap">
+            <input type="password" id="siPass" placeholder="Enter password" autocomplete="current-password" onkeydown="if(event.key==='Enter')signIn()"/>
+            <button class="eye-btn" onclick="togglePw('siPass',this)">👁</button>
+          </div>
+        </div>
+        <div class="form-error hidden" id="siError"></div>
+        <button class="auth-btn" onclick="signIn()">
+          <span>SIGN IN</span> <span class="btn-arrow">→</span>
+        </button>
+        <p class="demo-hint">Demo: <b>demo</b> / <b>demo123</b></p>
+      </div>
+
+      <!-- SIGN UP -->
+      <div id="signupForm" class="hidden">
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" id="suName" placeholder="Your name"/>
+        </div>
+        <div class="form-group">
+          <label>Username</label>
+          <input type="text" id="suUser" placeholder="Choose username"/>
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <div class="pw-wrap">
+            <input type="password" id="suPass" placeholder="Create password"/>
+            <button class="eye-btn" onclick="togglePw('suPass',this)">👁</button>
+          </div>
+        </div>
+        <div class="strength-bar" id="strengthBar"><div></div></div>
+        <div class="form-error hidden" id="suError"></div>
+        <button class="auth-btn" onclick="signUp()">
+          <span>CREATE ACCOUNT</span> <span class="btn-arrow">→</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/auth.js"></script>
+</body>
+</html>

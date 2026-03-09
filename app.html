@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FlowTrack PRO</title>
+  <link rel="manifest" href="manifest.json"/>
+  <meta name="theme-color" content="#07070F"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/app.css"/>
+</head>
+<body>
+  <div class="noise"></div>
+
+  <!-- ═══ TOP BAR (mobile) ═══ -->
+  <header id="topbar">
+    <div class="topbar-logo">FT<span>PRO</span></div>
+    <div class="topbar-center" id="topbarTitle">Dashboard</div>
+    <div class="topbar-right">
+      <button class="icon-btn" id="notifBtn" onclick="toggleNotifPanel()">
+        🔔<span class="notif-badge hidden" id="notifBadge"></span>
+      </button>
+      <button class="icon-btn" onclick="logout()">⏻</button>
+    </div>
+  </header>
+
+  <!-- ═══ NOTIFICATION PANEL ═══ -->
+  <div class="notif-panel hidden" id="notifPanel">
+    <div class="notif-panel-head">
+      <span>Notifications</span>
+      <button onclick="clearNotifs()">Clear all</button>
+    </div>
+    <div id="notifList" class="notif-list"></div>
+  </div>
+
+  <!-- ═══ SIDEBAR ═══ -->
+  <aside id="sidebar">
+    <div class="sidebar-brand">
+      <span class="sb-ft">FLOW</span><span class="sb-track">TRACK</span>
+      <span class="sb-pro">PRO</span>
+    </div>
+
+    <div class="sb-user" id="sbUser">
+      <div class="sb-avatar" id="sbAvatar">?</div>
+      <div>
+        <div class="sb-name" id="sbName">User</div>
+        <div class="sb-role">Student · Athlete</div>
+      </div>
+    </div>
+
+    <nav class="sb-nav">
+      <div class="sb-section-label">OVERVIEW</div>
+      <button class="nb active" data-tab="dashboard"  onclick="switchTab('dashboard',this)"><span>◈</span>Dashboard</button>
+
+      <div class="sb-section-label" style="margin-top:16px">SPACES</div>
+      <button class="nb college-nav" data-tab="college" onclick="switchTab('college',this)"><span>🎓</span>College</button>
+      <button class="nb school-nav"  data-tab="school"  onclick="switchTab('school',this)"><span>📚</span>School</button>
+      <button class="nb gym-nav"     data-tab="gym"     onclick="switchTab('gym',this)"><span>💪</span>Gym</button>
+      <button class="nb routine-nav" data-tab="routine" onclick="switchTab('routine',this)"><span>⚡</span>Routine</button>
+
+      <div class="sb-section-label" style="margin-top:16px">HEALTH</div>
+      <button class="nb diet-nav"    data-tab="diet"    onclick="switchTab('diet',this)"><span>🥩</span>Diet</button>
+      <button class="nb physique-nav"data-tab="physique"onclick="switchTab('physique',this)"><span>📸</span>Physique</button>
+
+      <div class="sb-section-label" style="margin-top:16px">MIND</div>
+      <button class="nb games-nav"   data-tab="games"   onclick="switchTab('games',this)"><span>🧠</span>MindGames</button>
+
+      <div class="sb-section-label" style="margin-top:16px">SETTINGS</div>
+      <button class="nb" onclick="openNotifSettings()"><span>🔔</span>Notifications</button>
+      <button class="nb" onclick="logout()"><span>⏻</span>Logout</button>
+    </nav>
+
+    <div class="sb-timer hidden" id="sbTimer">
+      <div class="stimer-dot"></div>
+      <span id="sbTimerVal">00:00</span>
+      <button onclick="stopTimer()">■ STOP</button>
+    </div>
+  </aside>
+
+  <!-- ═══ MAIN ═══ -->
+  <div id="mainWrap">
+
+    <!-- ── DASHBOARD ── -->
+    <section id="tab-dashboard" class="tab active">
+      <div class="pg-head">
+        <div><p class="eyebrow">OVERVIEW</p><h1 class="pg-title">Dashboard</h1></div>
+        <div class="head-stats" id="headStats"></div>
+      </div>
+      <div class="space-grid" id="spaceGrid"></div>
+      <div class="dash-grid">
+        <div class="dash-col">
+          <p class="col-lbl">TODAY'S SCHEDULE</p>
+          <div id="dashFeed"></div>
+        </div>
+        <div class="dash-col">
+          <p class="col-lbl">MACRO SNAPSHOT</p>
+          <div id="dashMacro"></div>
+          <p class="col-lbl" style="margin-top:20px">TIMER LOG</p>
+          <div id="dashLog"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── COLLEGE ── -->
+    <section id="tab-college" class="tab hidden">
+      <div class="pg-head" style="--acc:#6EE7F7">
+        <div><p class="eyebrow">SPACE</p><h1 class="pg-title" style="color:#6EE7F7">College 🎓</h1></div>
+        <button class="space-add-btn" style="--c:#6EE7F7" onclick="openModal('college')">+ New Task</button>
+      </div>
+      <div class="space-body" id="body-college"></div>
+    </section>
+
+    <!-- ── SCHOOL ── -->
+    <section id="tab-school" class="tab hidden">
+      <div class="pg-head">
+        <div><p class="eyebrow">SPACE</p><h1 class="pg-title" style="color:#FDE68A">School 📚</h1></div>
+        <button class="space-add-btn" style="--c:#FDE68A" onclick="openModal('school')">+ New Task</button>
+      </div>
+      <div class="space-body" id="body-school"></div>
+    </section>
+
+    <!-- ── GYM ── -->
+    <section id="tab-gym" class="tab hidden">
+      <div class="pg-head">
+        <div><p class="eyebrow">SPACE</p><h1 class="pg-title" style="color:#FB923C">Gym 💪</h1></div>
+        <button class="space-add-btn" style="--c:#FB923C" onclick="openModal('gym')">+ New Task</button>
+      </div>
+      <div class="space-body" id="body-gym"></div>
+    </section>
+
+    <!-- ── ROUTINE ── -->
+    <section id="tab-routine" class="tab hidden">
+      <div class="pg-head">
+        <div><p class="eyebrow">SPACE</p><h1 class="pg-title" style="color:#A78BFA">Routine ⚡</h1></div>
+        <button class="space-add-btn" style="--c:#A78BFA" onclick="openModal('routine')">+ New Task</button>
+      </div>
+      <div class="space-body" id="body-routine"></div>
+    </section>
+
+    <!-- ── DIET ── -->
+    <section id="tab-diet" class="tab hidden">
+      <div class="pg-head">
+        <div><p class="eyebrow">TRACKER</p><h1 class="pg-title" style="color:#34D399">Diet 🥩</h1></div>
+      </div>
+      <div class="diet-layout">
+        <div>
+          <div id="macroRings" class="macro-rings"></div>
+          <div class="water-row">
+            <p class="col-lbl">💧 WATER</p>
+            <div id="waterGlasses" class="water-glasses"></div>
+            <span id="waterCount" class="water-count"></span>
+          </div>
+          <p class="col-lbl" style="margin:18px 0 8px">MEAL LOG <span id="mealStat" class="dim-txt"></span></p>
+          <div id="mealList"></div>
+        </div>
+        <div>
+          <p class="col-lbl" style="margin-bottom:8px">ADD FOOD</p>
+          <input type="text" id="foodSearch" class="srch" placeholder="Search foods..." oninput="renderFoodDB()"/>
+          <div id="foodDB"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── PHYSIQUE ── -->
+    <section id="tab-physique" class="tab hidden">
+      <div class="pg-head">
+        <div><p class="eyebrow">PROGRESS</p><h1 class="pg-title" style="color:#F43F5E">Physique 📸</h1></div>
+        <button class="space-add-btn" style="--c:#F43F5E" onclick="togglePhysiqueForm()">+ Log Progress</button>
+      </div>
+      <div class="physique-form hidden" id="physForm">
+        <div class="phys-grid">
+          <input type="text"   id="pLabel"  placeholder="Label e.g. Week 4" class="modal-input"/>
+          <input type="date"   id="pDate"   class="modal-input"/>
+          <input type="number" id="pWeight" placeholder="Weight (kg)"       class="modal-input"/>
+          <input type="text"   id="pNote"   placeholder="Note..."            class="modal-input"/>
+        </div>
+        <div class="upload-zone" onclick="document.getElementById('pFile').click()">
+          <span style="font-size:28px">📸</span>
+          <span>Click to upload photo</span>
+          <input type="file" id="pFile" accept="image/*" style="display:none" onchange="previewPhoto(event)"/>
+        </div>
+        <img id="pPreview" class="p-preview hidden"/>
+        <div style="display:flex;gap:8px;margin-top:12px">
+          <button class="save-btn" onclick="savePhoto()">SAVE ENTRY</button>
+          <button class="cancel-btn" onclick="togglePhysiqueForm()">CANCEL</button>
+        </div>
+      </div>
+      <div id="wChart" class="w-chart hidden"></div>
+      <div id="photoGrid" class="photo-grid"></div>
+      <div class="tips-box">
+        <p class="col-lbl" style="margin-bottom:8px">📌 PRO TIPS</p>
+        <div class="tips-grid">
+          <span>◦ Same time every day — morning fasted</span>
+          <span>◦ Consistent lighting & background</span>
+          <span>◦ Front, side, back poses</span>
+          <span>◦ Weekly beats daily for tracking</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── GAMES ── -->
+    <section id="tab-games" class="tab hidden">
+      <div class="pg-head">
+        <div><p class="eyebrow">BRAIN TRAINING</p><h1 class="pg-title" style="color:#C084FC">MindGames 🧠</h1></div>
+      </div>
+      <div class="game-tabs" id="gameTabs"></div>
+      <div class="game-arena" id="gameArena"></div>
+      <div class="brain-perks">
+        <div class="bperk"><div class="bperk-icon">⚡</div><b>Reaction Speed</b><p>Faster reflexes = better lifts</p></div>
+        <div class="bperk"><div class="bperk-icon">🧠</div><b>Cognitive Focus</b><p>Mental clarity boosts training</p></div>
+        <div class="bperk"><div class="bperk-icon">🎯</div><b>Pattern Memory</b><p>Remember routines effortlessly</p></div>
+        <div class="bperk"><div class="bperk-icon">🔢</div><b>Quick Math</b><p>Count plates & macros instantly</p></div>
+      </div>
+    </section>
+
+  </div><!-- /mainWrap -->
+
+  <!-- ═══ ADD TASK MODAL ═══ -->
+  <div class="overlay hidden" id="overlay" onclick="closeModal()"></div>
+  <div class="modal hidden" id="taskModal">
+    <div class="modal-hd">
+      <h3 id="modalTitle">New Task</h3>
+      <button onclick="closeModal()" class="modal-x">✕</button>
+    </div>
+    <input type="text"   id="mName"     placeholder="Task name..."    class="modal-input"/>
+    <input type="text"   id="mDesc"     placeholder="Description (optional)" class="modal-input"/>
+    <div class="modal-row">
+      <input type="time"   id="mTime"   value="09:00" class="modal-input"/>
+      <input type="date"   id="mDate"   class="modal-input"/>
+    </div>
+    <div class="modal-row">
+      <input type="number" id="mDur"    value="30" min="5" placeholder="Duration (mins)" class="modal-input"/>
+      <select id="mPrio" class="modal-input">
+        <option value="normal">Normal</option>
+        <option value="high">🔴 High Priority</option>
+        <option value="low">🟢 Low Priority</option>
+      </select>
+    </div>
+    <label class="notif-toggle">
+      <input type="checkbox" id="mNotif" checked/>
+      <span>🔔 Notify me before this task</span>
+    </label>
+    <button class="modal-save" id="modalSaveBtn" onclick="saveTask()">ADD TASK</button>
+  </div>
+
+  <!-- ═══ NOTIFICATION SETTINGS MODAL ═══ -->
+  <div class="modal hidden" id="notifSettingsModal">
+    <div class="modal-hd">
+      <h3>🔔 Notifications</h3>
+      <button onclick="closeNotifSettings()" class="modal-x">✕</button>
+    </div>
+    <div class="notif-settings-body">
+      <p class="col-lbl">PERMISSION</p>
+      <div id="notifPermStatus" class="notif-perm-status"></div>
+      <button class="save-btn" style="margin-top:10px" onclick="requestNotifPermission()">Enable Notifications</button>
+      <p class="col-lbl" style="margin-top:20px">REMINDER TIMING</p>
+      <div class="notif-timing">
+        <label><input type="radio" name="ntime" value="5" checked/> 5 mins before</label>
+        <label><input type="radio" name="ntime" value="10"/> 10 mins before</label>
+        <label><input type="radio" name="ntime" value="15"/> 15 mins before</label>
+        <label><input type="radio" name="ntime" value="30"/> 30 mins before</label>
+      </div>
+      <p class="col-lbl" style="margin-top:20px">TEST</p>
+      <button class="save-btn" onclick="sendTestNotif()">Send Test Notification</button>
+    </div>
+  </div>
+
+  <!-- ═══ BOTTOM NAV (mobile) ═══ -->
+  <nav id="bottomNav">
+    <button onclick="switchTab('dashboard',this)"  data-tab="dashboard"  class="bn active"><span>◈</span><small>Home</small></button>
+    <button onclick="switchTab('college',this)"    data-tab="college"    class="bn"><span>🎓</span><small>College</small></button>
+    <button onclick="switchTab('gym',this)"        data-tab="gym"        class="bn"><span>💪</span><small>Gym</small></button>
+    <button onclick="switchTab('diet',this)"       data-tab="diet"       class="bn"><span>🥩</span><small>Diet</small></button>
+    <button onclick="switchTab('games',this)"      data-tab="games"      class="bn"><span>🧠</span><small>Mind</small></button>
+  </nav>
+
+  <script src="js/data.js"></script>
+  <script src="js/notifications.js"></script>
+  <script src="js/tasks.js"></script>
+  <script src="js/diet.js"></script>
+  <script src="js/games.js"></script>
+  <script src="js/physique.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
